@@ -6,50 +6,46 @@ using namespace std;
 //Note doing samething as in a but instead change a to n
 
 int main(int argc,char *argv[]){
-int *pa, *pb, *p, i, temp;
-//int a[SIZE] ={1,2,3,4,5,6,7,8,9,10}; 
-//int n;
-int n = argc-1; //get n from command line argument
-//cout<<"How many numbers needed? ";
-//cin>>n;
-//int *p = new int[n];//dynamic memory allocation
-p = new int[n];//dynamic memory allocation
-int *p_start = p; //keep p_start to hold the starting (original) address of the array
+int *pa, *pb, i, temp;
 
-for(i= 0; i<n; i++){
-  //cin>>*p;
-  *p = atoi(argv[i+1]); //get input from command line argument
-  p++; //move to next position
+int n = argc-1; //get n size from command line argument (excluding program name)
+
+pa = new int[n];//dynamic memory allocation: new pointer with an array of size n
+
+for(i = 0; i < n; i++, pa++) {
+   *pa = atoi(argv[i+1]);
 }
+pa -= n; // Reset pa to start
 
-p = p_start; //reset p to the starting address
-
-cout<<"Original: ";./
-for (i=0; i < n-1; i++ ,p++){
-   cout<<setw(3)<<*p ;
+cout << "Original:";
+for(i = 0; i < n; i++, pa++) {
+   cout << setw(3) << *pa;
 }
-cout<<setw(3)<<*p<<endl; //last element + enter
+cout << endl;
 
-p = p_start; //reset pa to the starting address
-pb = p + n - 1; //point to the last element
+//pa currently points past the end of the array (outside valid range of array)
+pb = pa - 1; // pb points to the last (valid) element of arrat
+pa -= n; // Reset pa to start
 
-for (i=0; i<n/2; i++)
-{
-   temp = *p;  
-   *p = *pb;  
+for(i = 0; i < n / 2; i++) {
+   temp = *pa;
+   *pa = *pb;
    *pb = temp;
-   p++;  pb--;
+   pa++; pb--;
 }
+//pa currently points to the middle (or just past the middle) of the array
+pa -= n / 2; // Reset pa to start after reversing; from the middle position to the start
 
-p = p_start; //reset p to the starting address
-cout<<"Reversed: ";
-for (i=0; i < n-1; i++ ,p++){
-    cout<<setw(3)<<*p ;
+cout << "Reversed:";
+for(i = 0; i < n; i++, pa++) {
+   cout << setw(3) << *pa;
 }
-cout<<setw(3)<<*p<<endl; //last element + enter
+cout << endl;
 
-
-delete []p_start;
+pa -= n; // Reset pa to start before deleting
+delete []pa; //deallocate memory
+//Note! delete only the pointer that points to the starting address of the array or where new was used to allocate memory
 
 return 0;
 }
+
